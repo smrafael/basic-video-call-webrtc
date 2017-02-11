@@ -1,0 +1,21 @@
+{
+  "name": "basic-video-call-webrtc",
+  "version": "1.0.0",
+  "description": "A simple basic video call using WebRTC",
+  "main": "webrtc_signal_server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "node",
+    "js",
+    "webrtc",
+    "socket"
+  ],
+  "author": "Rafael Mendes",
+  "license": "ISC",
+  "dependencies": {
+    "webrtc-adapter": "^3.1.3",
+    "websocket": "^1.0.24"
+  }
+}
