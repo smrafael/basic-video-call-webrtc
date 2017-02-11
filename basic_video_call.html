@@ -2,6 +2,9 @@
 <html>
 <head>
   <script>
+  var local_ip = "192.168.15.33";
+  var local_address = "http://"+local_ip+":1234"
+  var signaling_server_address = "ws://"+local_ip+":1234"
   var call_token; // unique token for this call
   var signaling_server; // signaling server for this call
   var peer_connection; // peer connection object
@@ -10,7 +13,6 @@
     offerToReceiveVideo: 1,
     offerToReceiveAudio: 0
   };
-  window.peer_connection = peer_connection;
 
   function start() {
     // create the WebRTC peer connection object
@@ -64,7 +66,7 @@
     // set location.hash to the unique token for this call
     document.location.hash = token;
 
-    signaling_server = new WebSocket("ws://192.168.15.33:1234");
+    signaling_server = new WebSocket(signaling_server_address);
     signaling_server.onopen = function() {
       // setup caller signal handler
       signaling_server.onmessage = caller_signal_handler;
@@ -79,14 +81,14 @@
     }
 
     document.title = "You are the Caller";
-    document.getElementById("loading_state").innerHTML = "Ready for a call...ask your friend to visit:<br/><br/>"+document.location;
+    document.getElementById("loading_state").innerHTML = "Ready for a call...ask your friend to visit:<br/><br/>"+local_address+"/"+call_token;
   }
 
   function setup_callee() {
     // get the unique token for this call from location.hash
     call_token = document.location.hash;
 
-    signaling_server = new WebSocket("ws://192.168.15.33:1234");
+    signaling_server = new WebSocket(signaling_server_address);
     signaling_server.onopen = function() {
       // setup caller signal handler
       signaling_server.onmessage = callee_signal_handler;
@@ -260,6 +262,6 @@
       <video id="remote_video"></video>
       <video id="local_video"></video>
     </div>
-    <script src="node_modules/webrtc-adapter/out/adapter.js"></script>
+    <script src="http://localhost:3000/node_modules/webrtc-adapter/out/adapter.js"></script>
   </body>
   </html>
