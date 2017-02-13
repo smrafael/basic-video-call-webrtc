@@ -1,48 +1,27 @@
 
-// useful libs
+// Useful libs
 var http = require("http");
+var node_static = require('node-static');
 var fs = require("fs");
 var websocket = require("websocket").server;
 
-// general variables
-var port = 1234;
+// General variables
+var port = 3000;
 var webrtc_clients = [];
 var webrtc_discussions = {};
 
-// web server functions
+// Setting up servers
+var static_server =  new node_static.Server(null, {cache: false});
+
 var http_server = http.createServer(function(request, response) {
-  var matches = undefined;
-  if (matches = request.url.match("^/images/(.*)")) {
-    var path = process.cwd()+"/images/"+matches[1];
-    fs.readFile(path, function(error, data) {
-      if (error) {
-        log_error(error);
-      } else {
-        response.end(data);
-      }
-    });
-  } else {
-    response.end(page);
-  }
-});
+  static_server.serve(request, response);
+}).listen(port);
 
-http_server.listen(port, function() {
-  log_comment("server listening (port "+port+")");
-});
-
-var page = undefined;
-fs.readFile("basic_video_call.html", function(error, data) {
-  if (error) {
-    log_error(error);
-  } else {
-    page = data;
-  }
-});
-
-// web socket functions
 var websocket_server = new websocket({
   httpServer: http_server
 });
+
+// Setting up signaling server
 websocket_server.on("request", function(request) {
   log_comment("new request ("+request.origin+")");
 
